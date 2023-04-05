@@ -14,7 +14,7 @@ function checksExistsUserAccount(request, response, next) {
 
   const userExists = users.find(user => user.username === username);
   if(!userExists) {
-    return response.status(404).send();
+    return response.status(404).json({error: "User not found."});
   }
 
   request.user = userExists;
@@ -25,8 +25,8 @@ function checksExistsUserAccount(request, response, next) {
 function checksCreateTodosUserAvailability(request, response, next) {
   const { user } = request;
 
-  if(!user.pro && user.todos >= 10) {
-    return response.status(403).send();
+  if(!user.pro && user.todos.length >= 10) {
+    return response.status(403).json({error: "Cannot create more Todos."});
   }
 
   return next();
